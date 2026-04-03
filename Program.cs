@@ -1,8 +1,6 @@
 using System.Threading.RateLimiting;
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls($"http://+:{port}");
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
