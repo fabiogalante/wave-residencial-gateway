@@ -6,8 +6,8 @@ obj/
 .vs/
 *.userprefs
 
-## Env
-appsettings.Development.json
+## JetBrains Rider
+.idea/
 
 ## Publish
 /publish
