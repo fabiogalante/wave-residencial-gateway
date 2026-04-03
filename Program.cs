@@ -17,6 +17,8 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
           .AllowAnyMethod()
           .AllowCredentials()));
 
+builder.Services.AddRequestTimeouts();
+
 builder.Services.AddRateLimiter(opt =>
 {
     opt.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
@@ -63,6 +65,7 @@ app.Use(async (ctx, next) =>
     await next(ctx);
 });
 
+app.UseRequestTimeouts();
 app.UseRateLimiter();
 
 app.MapGet("/health", () => Results.Ok(new { status = "gateway-ok", timestamp = DateTime.UtcNow }))
