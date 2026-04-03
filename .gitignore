@@ -1,0 +1,14 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userprefs
+
+## Env
+appsettings.Development.json
+
+## Publish
+/publish
+/app/publish

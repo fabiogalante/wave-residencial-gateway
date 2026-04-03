@@ -1,0 +1,7 @@
+[phases.build]
+cmds = [
+  "dotnet publish WaveResidencial.Gateway.csproj -c Release -o /app/publish --no-self-contained"
+]
+
+[start]
+cmd = "dotnet /app/publish/WaveResidencial.Gateway.dll"
