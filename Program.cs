@@ -3,7 +3,13 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .ConfigureHttpClient((_, handler) =>
+    {
+        // Railway internal network drops idle connections; detect stale ones fast
+        handler.PooledConnectionIdleTimeout = TimeSpan.FromSeconds(30);
+        handler.PooledConnectionLifetime = TimeSpan.FromMinutes(2);
+    });
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
     policy.WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [])
