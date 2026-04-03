@@ -45,8 +45,20 @@ builder.Services.AddRateLimiter(opt =>
 
 var app = builder.Build();
 
-app.UseRouting();
 app.UseCors();
+
+// Short-circuit OPTIONS preflights here — YARP forwards them to the API by default,
+// causing 502 when the API is unreachable. CORS headers were already set above.
+app.Use(async (ctx, next) =>
+{
+    if (HttpMethods.IsOptions(ctx.Request.Method))
+    {
+        ctx.Response.StatusCode = StatusCodes.Status204NoContent;
+        return;
+    }
+    await next(ctx);
+});
+
 app.UseRateLimiter();
 app.MapReverseProxy();
 
