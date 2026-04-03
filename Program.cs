@@ -60,6 +60,10 @@ app.Use(async (ctx, next) =>
 });
 
 app.UseRateLimiter();
+
+app.MapGet("/health", () => Results.Ok(new { status = "gateway-ok", timestamp = DateTime.UtcNow }))
+    .AllowAnonymous();
+
 app.MapReverseProxy();
 
 app.Run();
